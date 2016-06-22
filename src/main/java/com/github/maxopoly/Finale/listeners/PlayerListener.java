@@ -1,4 +1,4 @@
-package com.github.maxopoly.listeners;
+package com.github.maxopoly.finale.listeners;
 
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import com.github.maxopoly.FinaleManager;
+import com.github.maxopoly.finale.FinaleManager;
 
 public class PlayerListener implements Listener {
 
@@ -21,16 +21,19 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void playerLogin(PlayerJoinEvent e) {
-		if (!manager.isAttackSpeedEnabled()) return;
-		// Set attack speed
-		AttributeInstance attr = e.getPlayer().getAttribute(
+		if (manager.isAttackSpeedEnabled()) {;
+			// Set attack speed
+			AttributeInstance attr = e.getPlayer().getAttribute(
 				Attribute.GENERIC_ATTACK_SPEED);
-		if (attr != null) {
-			attr.setBaseValue(manager.getAttackSpeed());
+			if (attr != null) {
+				attr.setBaseValue(manager.getAttackSpeed());
+			}
 		}
-		// Register login for custom health regen
-		manager.getPassiveRegenHandler().registerPlayer(
-				e.getPlayer().getUniqueId());
+		if (manager.isRegenHandlerEnabled()) {
+			// Register login for custom health regen
+			manager.getPassiveRegenHandler().registerPlayer(
+					e.getPlayer().getUniqueId());
+		}
 	}
 
 	@EventHandler
